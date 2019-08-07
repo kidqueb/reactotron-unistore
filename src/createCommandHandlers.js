@@ -1,7 +1,7 @@
-import { getChanges } from './helpers'
+import { getChanges, getActionValues } from "./helpers";
 
 export default function createCommandHandlers(store, reactotron) {
-  let storeSub;
+  let storeSub, clientSubs = [];
   const restoreState = store.action((_, state) => state);
 
   return {
@@ -11,29 +11,24 @@ export default function createCommandHandlers(store, reactotron) {
     // },
 
     "state.values.subscribe": ({ payload }) => {
+      clientSubs = payload.paths
+
       // handle initial paths from the client
       if (payload.paths) {
-        const changes = getChanges(payload.paths, store.getState());
-        reactotron.stateValuesChange(changes);
-      }
-
-      function handler(state, action) {
-        const params = Object.keys(action())
-        const name = (action && action.name) || "Reactotron/DISPATCH";
-        const changes = getChanges(payload.paths, state);
-
-        let paramVals = {}
-        for (let index = 0; index < params.length; index++) {
-          const key = params[index]
-          paramVals[key] = state[key]
-        }
-
-        reactotron.stateActionComplete(name, paramVals);
+        const changes = getChanges(clientSubs, store.getState());
         reactotron.stateValuesChange(changes);
       }
 
       // subscribe to handle changes to our subscribed paths
-      if (!storeSub) store.subscribe(handler);
+      if (!storeSub) store.subscribe((state, action) => {
+        const name = (action && action.name) || "Reactotron/DISPATCH";
+        const changes = getChanges(clientSubs, state);
+
+        getActionValues(state, action).then(actionValues => {
+          reactotron.stateActionComplete(name, actionValues);
+          reactotron.stateValuesChange(changes);
+        });
+      });
     },
 
     "state.action.dispatch": ({ payload }) => {

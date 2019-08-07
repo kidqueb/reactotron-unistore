@@ -1,26 +1,34 @@
-import dlv from 'dlv'
-import diff from 'deep-diff'
+import dlv from "dlv";
 
+/**
+ * For each path we're subscribed to, get the values after the latest state change.
+ * @param {array} paths
+ * @param {object} state
+ * @param {array} changes
+ */
 export function getChanges(paths, state, changes = []) {
   for (let index = 0, total = paths.length; index < total; index++) {
     const path = paths[index];
-    const actualPath = path.endsWith('.*') ? path.replace('.*', '') : path
+    const actualPath = path.endsWith(".*") ? path.replace(".*", "") : path;
     const value = dlv(state, actualPath);
 
     changes.push({ path, value });
   }
 
-  return changes
+  return changes;
 }
 
-export function getActionParams(oldState, newState) {
-  let diffs = diff(oldState, newState)
-  console.log(diffs)
-  let params = {}
+/**
+ * @param {function} action
+ */
+export async function getActionValues(state, action) {
+  const actionKeys = Object.keys(await action());
 
-  // for (let index = 0; index < diffs.length; index++) {
-  //   console.log(diffs[index])
-  // }
+  let actionValues = {};
+  for (let index = 0; index < actionKeys.length; index++) {
+    const key = actionKeys[index];
+    actionValues[key] = state[key];
+  }
 
-  return params
+  return actionValues;
 }
