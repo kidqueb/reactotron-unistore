@@ -1,6 +1,6 @@
 {
   "name": "reactotron-unistore",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.1",
   "description": "Reactotron plugin for displaying unistore state subscriptions & actions",
   "source": "src/index.js",
   "main": "dist/index.js",

@@ -1,4 +1,4 @@
-import { getChanges } from "../src/helpers";
+import { getChanges } from "../../src/helpers";
 
 describe("getChanges", () => {
   let state;
