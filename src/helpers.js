@@ -6,14 +6,16 @@ import dlv from "dlv";
  * @param {object} state
  * @param {array} changes
  */
-export function getChanges(paths, state, changes = []) {
+export function getChanges(paths = [], state = {}, changes = []) {
+  if (paths.length === 0) return changes;
+
   for (let index = 0, total = paths.length; index < total; index++) {
     const path = paths[index];
     const actualPath = path.endsWith(".*") ? path.replace(".*", "") : path;
     const isRoot = ["", "*", ".*", "root", "root.*"].indexOf(path) > -1;
     const value = isRoot ? state : dlv(state, actualPath);
 
-    changes.push({ path, value });
+    if (value) changes.push({ path, value });
   }
 
   return changes;

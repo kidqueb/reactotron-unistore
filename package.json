@@ -8,7 +8,7 @@
     "build": "microbundle",
     "dev": "microbundle watch",
     "test": "jest",
-    "test:watch": "jest watch"
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "dlv": "^1.1.3"
