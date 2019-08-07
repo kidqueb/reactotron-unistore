@@ -18,10 +18,17 @@ export default function createCommandHandlers(store, reactotron) {
       }
 
       function handler(state, action) {
+        const params = Object.keys(action())
         const name = (action && action.name) || "Reactotron/DISPATCH";
         const changes = getChanges(payload.paths, state);
 
-        reactotron.stateActionComplete(name, state);
+        let paramVals = {}
+        for (let index = 0; index < params.length; index++) {
+          const key = params[index]
+          paramVals[key] = state[key]
+        }
+
+        reactotron.stateActionComplete(name, paramVals);
         reactotron.stateValuesChange(changes);
       }
 
