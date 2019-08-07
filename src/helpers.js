@@ -22,6 +22,7 @@ export function getChanges(paths, state, changes = []) {
  * @param {function} action
  */
 export async function getActionValues(state, action) {
+  if (!action) return false;
   const actionKeys = Object.keys(await action());
 
   let actionValues = {};

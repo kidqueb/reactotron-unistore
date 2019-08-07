@@ -5,7 +5,7 @@ import store from "./store.js";
 
 const actions = store => {
   return {
-    setUserUsername: (_, username) => ({ username }),
+    setUserUsername: (_, username) => { store.setState({ username }) },
     setUserFirstname: (_, firstName) => ({ firstName }),
     setUserLastname: async (_, lastName) => {
       await new Promise((resolve) => setTimeout(resolve, 500))
