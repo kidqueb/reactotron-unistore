@@ -24,7 +24,7 @@ describe("getChanges", () => {
 
     expect(changes).toEqual([
       { path: "user.firstName", value: state.user.firstName },
-      { path: "sports", value: state.sports },
+      { path: "sports", value: state.sports }
     ]);
   });
 
@@ -51,10 +51,10 @@ describe("getChanges", () => {
     ]);
   });
 
-  test('doesnt return a change object for nonexistent paths', () => {
+  test("doesnt return a change object for nonexistent paths", () => {
     const paths = ["user.statistics", "vendors"];
     const changes = getChanges(paths, state);
 
-    expect(changes).toEqual([])
-  })
+    expect(changes).toEqual([]);
+  });
 });

@@ -1,18 +1,19 @@
 import { getPathState, getChanges, getActionValues } from "./helpers";
 
 export default function createCommandHandlers(store, reactotron) {
-  let storeSub, clientSubs = [];
+  let storeSub,
+    clientSubs = [];
   const restoreState = store.action((_, state) => state);
 
   return {
     "state.keys.request": ({ payload }) => {
-      const state = getPathState(payload.path, store.getState())
-      reactotron.stateKeysResponse(payload.path, Object.keys(state))
+      const state = getPathState(payload.path, store.getState());
+      reactotron.stateKeysResponse(payload.path, Object.keys(state));
     },
 
     "state.values.request": ({ payload }) => {
-      const state = getPathState(payload.path, store.getState())
-      reactotron.stateValuesResponse(payload.path, state)
+      const state = getPathState(payload.path, store.getState());
+      reactotron.stateValuesResponse(payload.path, state);
     },
 
     "state.values.subscribe": ({ payload }) => {
@@ -35,9 +36,10 @@ export default function createCommandHandlers(store, reactotron) {
               reactotron.stateActionComplete(name, actionValues);
             } else {
               reactotron.display({
-                name: 'UNISTORE',
-                preview: 'store.setState',
-                value: 'Warning: The values of the action cannot be determined when store.setState is used to update state within an action. Think about returning an object instead.',
+                name: "UNISTORE",
+                preview: "store.setState",
+                value:
+                  "Warning: The values of the action cannot be determined when store.setState is used to update state within an action. Think about returning an object instead.",
                 important: true
               });
             }
