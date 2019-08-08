@@ -1,15 +1,19 @@
-import { getChanges, getActionValues } from "./helpers";
+import { getPathState, getChanges, getActionValues } from "./helpers";
 
 export default function createCommandHandlers(store, reactotron) {
-  let storeSub,
-    clientSubs = [];
+  let storeSub, clientSubs = [];
   const restoreState = store.action((_, state) => state);
 
   return {
-    // "state.keys.request": res => {
-    //   console.log(res);
-    //   const state = store.getState();
-    // },
+    "state.keys.request": ({ payload }) => {
+      const state = getPathState(payload.path, store.getState())
+      reactotron.stateKeysResponse(payload.path, Object.keys(state))
+    },
+
+    "state.values.request": ({ payload }) => {
+      const state = getPathState(payload.path, store.getState())
+      reactotron.stateValuesResponse(payload.path, state)
+    },
 
     "state.values.subscribe": ({ payload }) => {
       clientSubs = payload.paths;
