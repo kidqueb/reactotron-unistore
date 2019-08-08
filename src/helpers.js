@@ -1,6 +1,6 @@
 import dlv from "dlv";
 
-export const ROOT_VALS = ["", "*", ".*", "root", "root.*"]
+export const ROOT_VALS = ["", "*", ".*", "root", "root.*"];
 
 /**
  * For each path we're subscribed to, get the values after the latest state change.
@@ -13,14 +13,13 @@ export function getChanges(paths = [], state = {}, changes = []) {
 
   for (let index = 0, total = paths.length; index < total; index++) {
     const path = paths[index];
-    const value = getPathState(path, state)
+    const value = getPathState(path, state);
 
     if (value) changes.push({ path, value });
   }
 
   return changes;
 }
-
 
 /**
  * Since we recieve a function instead of a redux structured action object
@@ -43,24 +42,23 @@ export async function getActionValues(state, action) {
   return actionValues;
 }
 
-
 /**
  * Trims the .* off the end of a path to get its actual key to input to dlv.
  * @param {string} path
  */
 export function getActualPath(path) {
-  return path && path.endsWith(".*") ? path.replace(".*", "") : path;
+  return path && path.includes("*")
+    ? path.replace(".*", "").replace("*.", "")
+    : path;
 }
-
 
 /**
  * Determines if the path is one of our predetermined root paths.
  * @param {string} path
  */
 export function isPathRoot(path) {
-  return ROOT_VALS.indexOf(path) > -1
+  return ROOT_VALS.indexOf(path) > -1;
 }
-
 
 /**
  * Calls dlv to get the state at a specific path, but accounts for
@@ -69,8 +67,8 @@ export function isPathRoot(path) {
  * @param {object} state
  */
 export function getPathState(path, state) {
-  const actualPath = getActualPath(path)
-  const isRoot = isPathRoot(path)
+  const actualPath = getActualPath(path);
+  const isRoot = isPathRoot(path);
 
-  return isRoot ? state : dlv(state, actualPath)
+  return isRoot ? state : dlv(state, actualPath);
 }
