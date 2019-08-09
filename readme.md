@@ -28,4 +28,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 In the example the `<Provider />` and config import the store from a single `./store` module that exports unistore's `createStore({))`
 
 ## Accessing Root State
-By default `reactotron-unistore` will return the entire state when inputing any of these values: `["", "*", ".*", "root", "root.*"]`
+
+`["", "*", ".*", "root", "root.*"]`
+
+By default `reactotron-unistore` will return the entire state when any of the above values are input.
